@@ -7,7 +7,7 @@ export default function(app) {
     .get(root.initialMsg)
 
   app.route('/voteForCandidate')
-    .get(voting.voteForCandidate)
+    .post(voting.voteForCandidate)
 
   app.route('/totalVotesForCandidate')
     .get(voting.totalVotesForCandidate)
