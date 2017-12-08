@@ -4,7 +4,7 @@ import * as voting from './voting';
 export default function(app) {
 
   app.route('/')
-    .get(root.initialMsg)
+    .get(root.index)
 
   app.route('/voteForCandidate')
     .post(voting.voteForCandidate)

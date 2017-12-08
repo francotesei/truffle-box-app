@@ -1,17 +1,20 @@
-import { default as express} from 'express';
-import { default as bodyParser} from 'body-parser';
-import { default as Web3} from 'web3';
-import {default as morgan} from 'morgan'
-import {default as routes} from './routes/index';
 
-const http_port = 8080;
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
-var initHttpServer = () => {
-    var app = express();
-    app.use(bodyParser.json());
-    app.use(morgan('combined'));
-    routes(app);
-    app.listen(http_port, () => console.log('Listening http on port: ' + http_port));
+export default class App extends Component {
+  render() {
+    const { text } = this.props;
+
+    return (
+      <div>
+        <h1>hello world {text}</h1>
+      </div>
+    );
   }
+}
 
-initHttpServer();
+
+App.propTypes = {
+  isMobile: PropTypes.bool.isRequired
+};
