@@ -1,8 +1,7 @@
 import { default as express} from 'express';
 import { default as bodyParser} from 'body-parser';
 import { default as Web3} from 'web3';
-import {default as morgan} from 'morgan'
-import {default as enableDestroy } from 'server-destroy';
+import {default as morgan} from 'morgan';
 import {default as routes} from './routes/index';
 
 export const http_port = 8080;
@@ -12,7 +11,6 @@ export const http_port = 8080;
     server.use(morgan('combined'));
     server.use('/assets', express.static('assets'));
     routes(server);
-    enableDestroy(server);
 //   server.listen(http_port, () => console.log('Listening http on port: ' + http_port));
 
 export default server;

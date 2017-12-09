@@ -13,8 +13,3 @@ export default class App extends Component {
     );
   }
 }
-
-
-App.propTypes = {
-  isMobile: PropTypes.bool.isRequired
-};

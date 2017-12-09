@@ -24,7 +24,7 @@ contract Voting is Ownable {
     return votesReceived[candidate];
   }
 
-  function voteForCandidate(bytes32 candidate) public {
+  function voteForCandidate(bytes32 candidate) public{
     require(validCandidate(candidate));
     votesReceived[candidate] += 1;
   }
