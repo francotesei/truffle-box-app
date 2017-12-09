@@ -1,5 +1,5 @@
 import { default as contract } from 'truffle-contract';
-import voting_artifacts from '../../build/contracts/Voting.json'
+import Contracts from './contracts/'
 import { default as Web3} from 'web3';
 
 
@@ -7,7 +7,7 @@ import { default as Web3} from 'web3';
 
   constructor(){
 
-    this.contract = contract(voting_artifacts);
+    this.contract = contract(Contracts.Voting);
     this.web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:7545"));
     this.contract.setProvider(this.web3.currentProvider);
   }

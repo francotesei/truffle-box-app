@@ -4,10 +4,14 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "start": "rm -rf ./dist && webpack --config webpack.config.js"
+    "truffle-compile":"truffle compile",
+    "truffle-deploy":"truffle deploy",
+    "copy-contracts":"rm -rf app/model/contracts/contract_interfaces && babel build/contracts --out-dir app/model/contracts/contract_interfaces --copy-files",
+    "start": "npm run copy-contracts && rm -rf ./dist && webpack --config webpack.config.js",
+    "start-all":" npm run truffle-compile && npm run truffle-deploy && npm run copy-contracts && npm run  start"
   },
   "keywords": [],
-  "author": "",
+  "author": "Franco Tesei",
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.18.2",
