@@ -8,7 +8,7 @@ import IndexTemplate from '../templates/index';
    const body = renderToString(<App text='voting-food-app'/>); // state <App {... initialState}/>  initialState: JSON.stringify(initialState)
    res.send(IndexTemplate(({
      body:body,
-     title:"Voting-food-app"
+     title:"sda-food-app"
    })));
 }
 

@@ -1,80 +1,38 @@
-var webpack = require('webpack');
-var ExtractTextPlugin = require('extract-text-webpack-plugin');
-var nodeExternals = require('webpack-node-externals');
+const webpack = require('webpack')
+const path = require('path')
+const nodeExternals = require('webpack-node-externals')
+const StartServerPlugin = require('start-server-webpack-plugin')
 
-var isProduction = process.env.NODE_ENV === 'production';
-var productionPluginDefine = isProduction ? [
-  new webpack.DefinePlugin({'process.env': {'NODE_ENV': JSON.stringify('production')}})
-] : [];
-var clientLoaders = isProduction ? productionPluginDefine.concat([
-  new webpack.optimize.DedupePlugin(),
-  new webpack.optimize.OccurrenceOrderPlugin(),
-  new webpack.optimize.UglifyJsPlugin({ compress: { warnings: false }, sourceMap: false })
-]) : [];
-
-var commonLoaders = [
-  {
-    test: /\.json$/,
-    loader: 'json-loader'
-  }
-];
-
-module.exports = [
-  {
-    entry: './app/server.js',
-    output: {
-      path: __dirname+'/dist',
-      filename: 'server.js',
-      libraryTarget: 'commonjs2',
-      publicPath: '/'
-    },
+module.exports = {
+    entry: [
+        'webpack/hot/poll?1000',
+        './app/index'
+    ],
+    watch: true,
     target: 'node',
-    node: {
-      console: false,
-      global: false,
-      process: false,
-      Buffer: false,
-      __filename: false,
-      __dirname: false
-    },
-    externals: nodeExternals(),
-    plugins: productionPluginDefine,
+    externals: [nodeExternals({
+        whitelist: ['webpack/hot/poll?1000']
+    })],
     module: {
-      loaders: [
-        {
-          test: /\.js$/,
-          loader: 'babel-loader'
-        }
-      ].concat(commonLoaders)
-    }
-  },
-  {
-    entry: './app/browser.js',
+        rules: [{
+            test: /\.js?$/,
+            use: 'babel-loader',
+            exclude: /node_modules/
+        }]
+    },
+    plugins: [
+        new StartServerPlugin('server.js'),
+        new webpack.NamedModulesPlugin(),
+        new webpack.HotModuleReplacementPlugin(),
+        new webpack.NoEmitOnErrorsPlugin(),
+        new webpack.DefinePlugin({
+            "process.env": {
+                "BUILD_TARGET": JSON.stringify('server')
+            }
+        }),
+    ],
     output: {
-      path: __dirname + '/dist/assets',
-      publicPath: '/',
-      filename: 'bundle.js'
-    },
-    plugins: clientLoaders.concat([
-      new ExtractTextPlugin('index.css', {
-        allChunks: true
-      })
-    ]),
-    module: {
-      loaders: [
-        {
-          test: /\.js$/,
-          exclude: /node_modules/,
-          loader: 'babel-loader'
-        },
-        {
-          test: /\.scss$/,
-          loader: ExtractTextPlugin.extract('css!sass')
-        }
-      ]
-    },
-    resolve: {
-      extensions: ['.js', '.jsx']
+        path: path.join(__dirname, 'dist'),
+        filename: 'server.js'
     }
-  }
-];
+}
