@@ -6,56 +6,37 @@ var matches = require("../matches");
 
 contract('Prode', function(accounts) {
 
-  it("test match "+matches[0], function() {
-     Prode.deployed().then(function(instance) {
-       instance.getMatch(matches[0]).then(function(match) {
-         console.log(match)
-         console.log(bytes32ToString(match[1].toString()))
-      assert.equal(bytes32ToString(match[0]), bytes32ToString(matches[0]), "Error!");
-    });
-  });
-  });
+  it("test  matches ", async function() {
 
-  it("add Match", function() {
-    return Prode.deployed().then(function(instance) {
-      return instance.addMatches([web3.toHex('pepe-pipo')],{gas: 140000, from:accounts[0]});
-    }).then(function() {
-       return Prode.deployed().then(function(instance) {
-        return instance.getMatch(web3.toHex('pepe-pipo')).then(function(match){
-           assert.equal(bytes32ToString(match[0]), "pepe-pipo", "Error get match Argentina Alemania");
-
-         })
-       })
-    });
+    let inst = await Prode.deployed();
+    let match = null;
+    for( var i = 0 ; i < matches.length ; i++ ){
+      match = await inst.getMatch(matches[i]);
+      console.log(match);
+      console.log(bytes32ToString(match[0]));
+      assert.equal(bytes32ToString(match[0]), bytes32ToString(matches[i]), "Error!");
+}
   });
 
-  it("add proposal argentina-alemania", function() {
-    return Prode.deployed().then(function(instance) {
-      return instance.addPropostal([web3.toHex('argentina-alemania')],[2],{gas: 140000, from:accounts[1]});
-    }).then(function() {
-       return Prode.deployed().then(function(instance) {
-        return instance.getProposal(accounts[1],web3.toHex('argentina-alemania')).then(function(prop){
-          console.log(prop)
-            assert.equal(prop.toString(), "2", "Error!");
-
-         })
-       })
-    });
+  it("add Match", async function() {
+    let inst = await Prode.deployed();
+    await inst.addMatches([web3.toHex('pepe-pipo')],{gas: 140000, from:accounts[0]});
+    let match = await inst.getMatch(web3.toHex('pepe-pipo'));
+    assert.equal(bytes32ToString(match[0]), "pepe-pipo", "Error get match Argentina Alemania");
   });
 
-  it("add result"+matches[2], function() {
-    return Prode.deployed().then(function(instance) {
-      return instance.addMatchResult(matches[2],1,{gas: 140000, from:accounts[0]});
-    }).then(function() {
-       return Prode.deployed().then(function(instance) {
-        return instance.getMatch(matches[2])
-        .then(function(prop){
-          console.log(prop)
-           assert.equal(prop[1].toString(), "1", "Error!");
+  it("add proposal argentina-alemania",async function() {
+    let inst = await Prode.deployed();
+    await inst.addPropostal([web3.toHex('argentina-alemania')],[2],{gas: 140000, from:accounts[1]});
+    let prop = await inst.getProposal(accounts[1],web3.toHex('argentina-alemania'))
+    assert.equal(prop.toString(), "2", "Error!");
+  });
 
-         })
-       })
-    });
+  it("add result "+matches[2],async function() {
+    let inst = await Prode.deployed();
+    await inst.addMatchResult(matches[2],1,{gas: 140000, from:accounts[0]});
+    let match = await inst.getMatch(matches[2]);
+    assert.equal(match[1].toString(), "1", "Error!");
   });
 
 });
