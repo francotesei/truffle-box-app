@@ -5,6 +5,12 @@ contract Prode {
 
 // see enums enum Result {win = 1,lose = 2,tie = 0}
 
+/*
+ 0 default
+ 1 win
+ 2 lose
+ 3 tie
+*/
 
 /*
   struct Match {
@@ -19,37 +25,42 @@ contract Prode {
   }
 
 
-bytes32[] public teams;
-mapping (bytes32 => int) matches;
+bytes32[] public _matches;
+mapping (bytes32 => int) matchesResult;
 mapping (address => Voter)  voters;
 address public owner;
 
 
 
-function Prode(bytes32[] _teams) public{
+function Prode(bytes32[] matches) public{
   owner = msg.sender;
-  teams = _teams;
+  _matches = matches;
 }
 
-function addMatches(bytes32[] _teams) public{
+function addMatches(bytes32[] matches) public{
   require(msg.sender == owner);
-  for(uint i = 0 ; i < _teams.length ; i++){
-    teams.push(_teams[i]);
+  for(uint i = 0 ; i < matches.length ; i++){
+    _matches.push(matches[i]);
   }
 }
 
-function addPropostal(bytes32[] _teams , int[] _result ) public{
-  for( uint i = 0 ; i < _teams.length ; i++){
-    voters[msg.sender].proposals[_teams[i]] = _result[i];
+function addMatchResult(bytes32 _team,int result)public {
+  require(msg.sender == owner);
+  matchesResult[_team] = result;
+}
+
+function addPropostal(bytes32[] matches , int[] result ) public{
+  for( uint i = 0 ; i < matches.length ; i++){
+    voters[msg.sender].proposals[matches[i]] = result[i];
   }
 }
 
-function getProposal (address voterAddr , bytes32 _team) view public returns (int){
-    return voters[voterAddr].proposals[_team];
+function getProposal (address voterAddr , bytes32 _match) view public returns (int){
+    return voters[voterAddr].proposals[_match];
 }
 
- function getMatch(bytes32 team)view public returns(bytes32,int){
-   return (team,matches[team]);
+ function getMatch(bytes32 _match)view public returns(bytes32,int){
+   return (_match,matchesResult[_match]);
  }
 
 }
