@@ -1,4 +1,4 @@
-
+/*
 var Voting = artifacts.require("Voting");
 
 contract('Voting', function(accounts) {
@@ -15,3 +15,4 @@ contract('Voting', function(accounts) {
   })
 
 })
+*/
